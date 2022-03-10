@@ -1,0 +1,37 @@
+# Establish a session. 
+# This is the only request that contains a user name and password. 
+# The server replies with a session token and ID.
+#
+- name: establish a session
+  uri:
+    url: "{{ web_ui }}/redfish/v1/SessionService/Sessions"
+    method: POST
+    headers: 
+      Accept: application/json
+      OData-Version: "4.0"
+    body_format: json
+    body: '{ "UserName": "{{ username }}", "Password": "{{ password }}" }'
+    validate_certs: no
+    status_code: 201
+  register: r_post_reply
+  no_log: "{{ toggle_no_log | default(true) }}"
+
+- name: copy the session token
+  set_fact:
+    session_token: "{{ r_post_reply.x_auth_token }}"
+  no_log: "{{ toggle_no_log | default(true) }}"
+
+- name: copy the session token
+  set_fact:
+    session_id: "{{ r_post_reply.json.Id }}"
+  no_log: "{{ toggle_no_log | default(true) }}"
+
+- name: display session facts
+  debug:
+    msg: "session_token: {{ session_token }}, session_id: {{ session_id }}"
+
+- name: pause to read message
+  pause:
+    seconds: 5
+  when: "toggle_pause | default(false)"
+

@@ -1,0 +1,38 @@
+- name: is the server powered up?
+  uri:
+    url: "{{ web_ui }}/redfish/v1/Systems/1"
+    method: GET
+    headers:
+      Accept: application/json
+      OData-Version: "4.0"
+      X-Auth-Token: "{{ session_token }}"
+    body_format: json
+    body: '{}'
+    validate_certs: no
+  register: r_system
+  no_log: "{{ toggle_no_log | default(true) }}"
+
+- name: set off boolean
+  set_fact:
+    server_off: True
+  when: 'r_system["json"]["PowerState"] == "Off"'
+
+- name: power up the server
+  uri:
+    url: "{{ web_ui }}/redfish/v1/Systems/1/Actions/ComputerSystem.Reset"
+    method: POST
+    headers:
+      Accept: application/json
+      OData-Version: "4.0"
+      X-Auth-Token: "{{ session_token }}"
+    body_format: json
+    body: '{ "ResetType": "On" }'
+    validate_certs: no
+  when: "server_off"
+  no_log: "{{ toggle_no_log | default(true) }}"
+
+- name: wait for boot
+  pause: 
+    seconds: 60
+  when: "server_off"
+

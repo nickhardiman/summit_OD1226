@@ -1,0 +1,146 @@
+
+# xorriso - extract objects from Rock Ridge ISO
+- name: install the xorriso package
+  ansible.builtin.yum:
+    name: xorriso
+    state: present
+
+# ----------
+# This section is based on this article.
+# https://access.redhat.com/solutions/60959
+# How to create a modified Red Hat Enterprise Linux ISO with kickstart file or modified installation media?
+# 2
+# xorriso options
+# -osirrox setting[:option:...]   Copies files from ISO image to disk filesystem
+# -indev address                  Set input drive and load an ISO image
+# -extract iso_rr_path disk_path  Source and destination
+#
+- name: copy everything from the ISO file
+  ansible.builtin.command:
+    cmd: >
+      xorriso
+        -osirrox on
+        -indev {{ source_iso }}
+        -extract / {{ build_dir }}/source
+
+# 4
+- name: add the kickstart file
+  ansible.builtin.copy:
+    src: "{{ source_kickstart }}"
+    dest: "{{ build_dir }}/source/ks.cfg"
+    remote_src: yes
+
+# 5
+# read the ISO label
+# translate from a block ID like this
+#   my.iso: BLOCK_SIZE="2048" UUID="2020-09-17-14-47-27-00" LABEL="RHEL-7.9 Server.x86_64" TYPE="iso9660" PTUUID="6d3aa136" PTTYPE="dos"
+# to these
+#   label: RHEL-7.9 Server.x86_64
+#   label_hex_encoded: RHEL-7.9\x20Server.x86_64
+- name: read label
+  ansible.builtin.command:
+    cmd: blkid {{ source_iso }}
+  register: r_blkid
+- set_fact:
+    label: "{{ r_blkid.stdout | regex_replace('.+LABEL=\"([^\"]+)\".+', '\\1') }}"
+- set_fact:
+    label_partial: "{{ label | urlencode() }}"
+- set_fact:
+    label_hex_encoded: '{{ label_partial | regex_replace("%", "\\x") }}'
+- debug:
+    var: label
+
+# 6
+# no need to replace LABEL in isolinux.cfg, it should be correct.
+
+- name: append inst.ks=cdrom:/ks.cfg in isolinux.cfg
+  ansible.builtin.replace:
+    path: "{{ build_dir }}/source/isolinux/isolinux.cfg"
+    regexp: '^(.*)append initrd=(.*)(?!ks\.cfg)$'
+    replace: '\1append initrd=\2 inst.ks=cdrom:/ks.cfg'
+
+# 7
+- name: append inst.ks=cdrom:/ks.cfg in grub.cfg
+  ansible.builtin.replace:
+    path: "{{ build_dir }}/source/EFI/BOOT/grub.cfg"
+    regexp: '^(.*)linuxefi(.*)(?!ks\.cfg)$'
+    replace: '\1linuxefi\2 inst.ks=cdrom:/ks.cfg'
+
+
+# ----------
+# extra customization
+# isolinux.cfg, grub.cfg and grub.conf have these values.
+# grub.conf is not used for this boot.
+#
+- name: replace timeout in grub.cfg
+  ansible.builtin.lineinfile:
+    path: "{{ build_dir }}/source/EFI/BOOT/grub.cfg"
+    regexp: 'set timeout'
+    line: 'set timeout=5'
+
+- name: replace timeout in isolinux.cfg
+  ansible.builtin.lineinfile:
+    path: "{{ build_dir }}/source/isolinux/isolinux.cfg"
+    regexp: '^timeout'
+    line: 'timeout 50'
+
+- name: replace default in grub.cfg
+  ansible.builtin.lineinfile:
+    path: "{{ build_dir }}/source/EFI/BOOT/grub.cfg"
+    regexp: 'set default='
+    line: 'set default="0"'
+
+- name: remove default in isolinux.cfg
+  ansible.builtin.lineinfile:
+    path: "{{ build_dir }}/source/isolinux/isolinux.cfg"
+    regexp: 'menu default'
+    state: absent
+
+- name: add default in isolinux.cfg
+  ansible.builtin.lineinfile:
+    path: "{{ build_dir }}/source/isolinux/isolinux.cfg"
+    insertafter: 'menu label'
+    line: '  menu default'
+    firstmatch: yes
+    state: present
+
+# ----------
+
+# 8
+# running mkisofs actually runs xorrisofs -  Emulation of ISO 9660 program mkisofs
+# options cover these settings
+# * ISOLinux
+# * Joliet
+# * Rock Ridge
+# * EFI
+# * volume label
+# * new ISO file name
+# * files to add
+#
+- name: create new ISO file
+  command:
+    cmd: >
+      mkisofs
+        -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table
+        -J -R -l -eltorito-alt-boot -e images/efiboot.img -no-emul-boot -input-charset iso8859-1
+        -V "{{ label }}"
+        -o "{{ build_dir }}/dest/{{ new_iso }}"
+        -graft-points
+        .
+        /my_scripts=/var/www/html/scripts
+  args:
+    chdir: "{{ build_dir }}/source"
+
+# done with the article
+# ----------
+
+- name: put a copy of the ISO in the repo
+  ansible.builtin.copy:
+    src: "{{ build_dir }}/dest/{{ new_iso }}"
+    dest: "/var/www/html/{{ new_iso }}"
+    remote_src: yes
+
+- name: display new ISO file path
+  debug:
+    msg: "/var/www/html/{{ new_iso }}"
+

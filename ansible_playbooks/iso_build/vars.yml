@@ -1,0 +1,4 @@
+temp_base_dir: /var/tmp
+source_iso:  "/var/www/html/{{ iso }}"
+source_kickstart: "/var/www/html/{{ kickstart }}"
+

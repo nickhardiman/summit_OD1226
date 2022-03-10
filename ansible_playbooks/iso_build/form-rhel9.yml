@@ -1,0 +1,4 @@
+iso:  RHEL-9.0.0-20210613.4-BaseOS-x86_64-boot.iso
+kickstart:  kickstart-rhel9-1.ks
+new_iso: my_rhel9.iso
+

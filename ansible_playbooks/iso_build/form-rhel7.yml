@@ -1,0 +1,11 @@
+# a form to submit for building a RHEL7 custom bootable ISO
+# Copy to form.yml and upload to git1.
+# That triggers the build process.
+#   git add .
+#   git commit -m 'new form'
+#   git push
+#
+iso:  rhel-server-7.9-x86_64-boot.iso
+kickstart:  kickstart-rhel7-1.ks
+new_iso: my_rhel7.iso
+

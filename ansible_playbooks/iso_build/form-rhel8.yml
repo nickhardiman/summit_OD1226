@@ -1,0 +1,4 @@
+iso:  rhel-8.5-x86_64-boot.iso
+kickstart:  kickstart-rhel8-1.ks
+new_iso: my_rhel8.iso
+

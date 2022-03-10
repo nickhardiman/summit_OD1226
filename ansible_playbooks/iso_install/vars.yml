@@ -1,0 +1,10 @@
+# Credentials usually live in a secure store.
+username: nick
+password: redhatter
+
+toggle_pause: false
+toggle_no_log: false
+web_ui: https://ILOCNX15200K1.lab.example.com
+image_url: "http://192.168.1.14/{{ new_iso }}"
+server_off: false
+

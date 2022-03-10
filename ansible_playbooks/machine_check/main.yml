@@ -1,0 +1,16 @@
+---
+- name: check server resources
+  hosts: builder1.lab.example.com
+  become: no
+  gather_facts: no
+  vars_files:
+  - vars.yml
+  tasks:
+  #
+  - include_tasks: create_session.yml
+  - block:
+    - include_tasks: chassis_health.yml
+    - include_tasks: system_memory.yml
+    always:
+    - include_tasks: destroy_session.yml
+

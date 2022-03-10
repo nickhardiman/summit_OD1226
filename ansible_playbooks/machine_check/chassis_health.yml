@@ -1,0 +1,38 @@
+# check
+#
+- name: read chassis collection
+  uri:
+    url: "{{ web_ui }}/redfish/v1/Chassis/1"
+    method: GET
+    headers:
+      Accept: application/json
+      OData-Version: "4.0"
+      X-Auth-Token: "{{ session_token }}"
+    body_format: json
+    body: '{}'
+    validate_certs: no
+  register: r_chassis
+  no_log: "{{ toggle_no_log | default(true) }}"
+
+- name: display the reply
+  debug:
+    verbosity: 1
+    var: r_chassis
+
+- name: copy health value
+  set_fact:
+    chassis_health: "{{ r_chassis.json.Status.Health }}"
+
+- name: display health
+  debug:
+    var: chassis_health
+
+- name: pause to read message
+  pause:
+    seconds: 5
+  when: "toggle_pause | default(false)"
+
+- name: continue if healthy
+  fail:
+  when: "chassis_health != 'OK'"
+

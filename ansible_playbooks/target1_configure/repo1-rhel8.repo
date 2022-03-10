@@ -1,0 +1,12 @@
+[repo1-rhel8-baseos]
+name = local copy of Red Hat Enterprise Linux 8 for x86_64 BaseOS
+baseurl = http://192.168.1.14/rhel8-repo/BaseOS
+enabled = 1
+gpgcheck = 0
+
+[repo1-rhel8-appstream]
+name = local copy of Red Hat Enterprise Linux 8 for x86_64 AppStream
+baseurl = http://192.168.1.14/rhel8-repo/AppStream
+enabled = 1
+gpgcheck = 0
+

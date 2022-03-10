@@ -1,0 +1,92 @@
+#!/bin/bash -x
+echo "phone home"
+
+
+# configure SSH for root
+
+mkdir /root/.ssh
+chmod 700 /root/.ssh
+cat << EOF > /root/.ssh/config
+Host *
+  StrictHostKeyChecking no
+EOF
+
+
+mkdir /root/.ssh
+
+cat << EOF > /root/.ssh/id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCVJbZvwgwnHfvOuZkoWA2aZcMAhXIIjBAfKrQolsDi/FyIoNhF0BvC0YstNBKmqdbXCvass0J1Ejo/MmEvrb5d/4y7DU66t3stFU8PhCKLhFBmKqaN4PE4xIzTMJFNJJL3o2qoL0UXGUhwgZ1dwNK8/2+ozioXeagKtoASrYIBpZn0NgygkbifBWikzAhJT3cbm6pOwgWQxHQJsfran/MFFSf8Z+hbtrtZyDVtAtiRSxrG3rBI88zliRrZOciR5SAcW/L17mNbtx18E3v2yIgm4ZEkYSgg7V+1WNTWD7kD5239HgTSeVIfs0ClFpwqnSaaeqaHUmrpiT+2l/4QYmYW2POQi5GAA2NZcl55ydBMax4+e4eumzDlbB30VQYvkk29bL/kH3WgwLkK0agCDFWmbdIqD+PaFUptZJsbjrPe6oG6ELKEz6yT/B4/ZdpmB28J2DRnZKFSUJM7ipoPYY1WdbiIDuyd5hBsLFYsvX6rqztCg7W18wjpiUmP+r+lAgs= scm@git1.lab.example.com
+EOF
+
+cat << EOF > /root/.ssh/id_rsa
+-----BEGIN OPENSSH PRIVATE KEY-----
+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
+-----END OPENSSH PRIVATE KEY-----
+EOF
+
+cat << EOF > /root/.ssh/config
+Host *
+  StrictHostKeyChecking no
+EOF
+
+cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
+chmod 700 /root/.ssh
+chmod 600 /root/.ssh/id_rsa   /root/.ssh/authorized_keys
+
+
+# configure SSH for nick
+
+mkdir /home/nick/.ssh
+
+cat << EOF > /home/nick/.ssh/authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCVJbZvwgwnHfvOuZkoWA2aZcMAhXIIjBAfKrQolsDi/FyIoNhF0BvC0YstNBKmqdbXCvass0J1Ejo/MmEvrb5d/4y7DU66t3stFU8PhCKLhFBmKqaN4PE4xIzTMJFNJJL3o2qoL0UXGUhwgZ1dwNK8/2+ozioXeagKtoASrYIBpZn0NgygkbifBWikzAhJT3cbm6pOwgWQxHQJsfran/MFFSf8Z+hbtrtZyDVtAtiRSxrG3rBI88zliRrZOciR5SAcW/L17mNbtx18E3v2yIgm4ZEkYSgg7V+1WNTWD7kD5239HgTSeVIfs0ClFpwqnSaaeqaHUmrpiT+2l/4QYmYW2POQi5GAA2NZcl55ydBMax4+e4eumzDlbB30VQYvkk29bL/kH3WgwLkK0agCDFWmbdIqD+PaFUptZJsbjrPe6oG6ELKEz6yT/B4/ZdpmB28J2DRnZKFSUJM7ipoPYY1WdbiIDuyd5hBsLFYsvX6rqztCg7W18wjpiUmP+r+lAgs= scm@git1.lab.example.com
+EOF
+
+chmod 700 /home/nick/.ssh
+chmod 600 /home/nick/.ssh/authorized_keys
+chown -R nick:nick /home/nick/.ssh
+
+# passwordless sudo
+echo 'nick      ALL=(ALL)       NOPASSWD: ALL' > /etc/sudoers.d/nick
+
+# phone home
+ssh nick@192.168.1.16  /home/nick/summit_OD1226/shell_scripts/app_install.sh
+
+# clean up
+rm /var/spool/cron/root
+

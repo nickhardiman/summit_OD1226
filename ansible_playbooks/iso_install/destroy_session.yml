@@ -1,0 +1,44 @@
+# remove a current session
+#
+- name: list redfish sessions
+  uri:
+    url: "{{ web_ui }}/redfish/v1/SessionService/Sessions"
+    method: GET
+    headers:
+      Accept: application/json
+      OData-Version: "4.0"
+      X-Auth-Token: "{{ session_token }}"
+    body_format: json
+    body: '{}'
+    validate_certs: no
+  register: r_sessions
+  no_log: "{{ toggle_no_log | default(true) }}"
+
+- name: display the reply
+  debug:
+    verbosity: 1
+    var: r_sessions
+
+# Some BMCs reply with a 200 status code. Some return 204.
+- name: destroy this session
+  uri:
+    url: "{{ web_ui }}/redfish/v1/SessionService/Sessions/{{ session_id }}"
+    method: DELETE
+    headers:
+      Accept: application/json
+      OData-Version: "4.0"
+      X-Auth-Token: "{{ session_token }}"
+    body_format: json
+    body: "{}"
+    validate_certs: no
+    status_code:
+    - 200
+    - 204
+  register: r_session_delete
+  no_log: "{{ toggle_no_log | default(true) }}"
+
+- name: display the reply
+  debug:
+    verbosity: 1
+    var: r_session_delete
+

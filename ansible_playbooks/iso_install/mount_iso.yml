@@ -1,0 +1,80 @@
+# Eject the last ISO used, mount a new one and restart the server.
+#
+# This task has an extra option, "return_content".
+# The reply is always stored in a key named "json". 
+# This option adds the reply in a key named "content".
+# see 
+# ansible-doc uri
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/uri_module.html
+- name: left-over virtual media? eject it.
+  ansible.builtin.uri:
+    url: "{{ web_ui }}/redfish/v1/Managers/1/VirtualMedia/2/Actions/Oem/Hpe/HpeiLOVirtualMedia.EjectVirtualMedia"
+    method: POST
+    headers:
+      Accept: application/json
+      OData-Version: "4.0"
+      X-Auth-Token: "{{ session_token }}"
+    body_format: json
+    body: '{}'
+    validate_certs: no
+    return_content: yes
+  register: r_eject
+  no_log: "{{ toggle_no_log | default(true) }}"
+
+- name: display the reply
+  debug:
+    verbosity: 1
+    var: r_eject
+  
+- name: check for success
+  debug: 
+    var: r_eject.content
+
+- name: pause to read message
+  pause:
+    seconds: 5
+
+- name: insert the CD (use the ISO file as virtual media)
+  uri:
+    url: "{{ web_ui }}/redfish/v1/Managers/1/VirtualMedia/2/Actions/VirtualMedia.InsertMedia"
+    method: POST
+    headers:
+      Accept: application/json
+      OData-Version: "4.0"
+      X-Auth-Token: "{{ session_token }}"
+    body_format: json
+    body: '{ "Image": "{{ image_url }}", "Inserted": true, "WriteProtected": true }'
+    validate_certs: no
+  register: r_insert
+  no_log: "{{ toggle_no_log | default(true) }}"
+
+- name: display the reply
+  debug:
+    verbosity: 1
+    var: r_insert
+
+# check
+#
+- name: read the current mount settings
+  uri:
+    url: "{{ web_ui }}/redfish/v1/Managers/1/VirtualMedia/2"
+    method: GET
+    headers:
+      Accept: application/json
+      OData-Version: "4.0"
+      X-Auth-Token: "{{ session_token }}"
+    body_format: json
+    body: '{}'
+    validate_certs: no
+  register: r_mount
+  no_log: "{{ toggle_no_log | default(true) }}"
+
+- name: display the reply
+  debug:
+    var: r_mount.json.Image
+
+- name: pause to read message
+  pause:
+    seconds: 5
+  when: "toggle_pause | default(false)"
+

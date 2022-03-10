@@ -1,0 +1,29 @@
+- name: create a temporary directory
+  tempfile: 
+    state: directory
+    suffix: ".iso"
+    path: "{{ temp_base_dir }}"
+  register: r_tempdir
+
+- name: note the new path
+  ansible.builtin.set_fact:
+    build_dir: "{{ r_tempdir.path }}"
+- debug: 
+    var: build_dir
+- pause: 
+    seconds: 5
+  when: "toggle_pause | default(false)"
+
+
+- name: add a directory to hold the source files
+  file:
+    path: "{{ build_dir }}/source"
+    state: "directory"
+    mode: 0750
+
+- name: add a directory to hold the new ISO file
+  file:
+    path: "{{ build_dir }}/dest"
+    state: "directory"
+    mode: 0750
+

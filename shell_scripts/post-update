@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# The full list of hooks is here.
+# https://git-scm.com/docs/githooks
+#
+# /var/git/summit_OD1226.git/hooks/post-update
+#
+USER=$(/usr/bin/whoami)
+/usr/bin/logger -t githook -p info "$USER post-update"
+
+/usr/bin/ssh nick@controller1.lab.example.com /home/nick/summit_OD1226/shell_scripts/os_install.sh
+

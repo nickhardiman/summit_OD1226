@@ -1,0 +1,6 @@
+[repo1-rhel7]
+name = local copy of Red Hat Enterprise Linux 7 for x86_64
+baseurl = http://192.168.1.14/rhel7-repo
+enabled = 1
+gpgcheck = 0
+

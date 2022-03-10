@@ -1,0 +1,37 @@
+
+These scripts authenticate with basic user name and password.
+Values are stored in this file. 
+account
+
+power_off.sh
+power_check.sh
+power_on.sh
+manufacturer_check.sh
+eject.sh
+mount.sh
+mount_check.sh
+one_time_boot.sh
+one_time_boot_check.sh
+restart.sh
+
+These use a session token.
+
+open_user_session.sh
+open_user_session_check.sh
+use_user_session.sh
+close_user_session.sh
+
+This one contains HPE CLI commands, an alternative way to work.
+hpe-shell.sh
+
+This script is copied to the target machine by kickstart, and run after the first boot. 
+phone_home.sh
+
+And this is a git hook script. 
+post-update
+It belongs in git's "hooks" directory, like this.
+git1:/var/git/hello_world.git/hooks/
+
+This goes in controller1:~/.ssh/config
+It disables SSH security checks. Bad idea.
+config

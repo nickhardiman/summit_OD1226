@@ -1,0 +1,19 @@
+all:
+  children:
+    controller_nodes:
+      hosts:
+        controller1.lab.example.com: {}
+    machines_to_build:
+      hosts:
+        target1.lab.example.com: {}
+    builders:
+      hosts:
+        builder1.lab.example.com: {}
+    repositories:
+      hosts:
+        repo1.lab.example.com: {}
+    source_code_managers:
+      hosts:
+        git1.lab.example.com: {}
+    ungrouped: {}
+

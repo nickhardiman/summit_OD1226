@@ -1,0 +1,86 @@
+# A task to check for one-time boot could go here.
+# But the next PATCH request does not cause an error if BootSourceOverride values have already been set. 
+# Sometimes running and re-running the same command makes no difference. 
+
+- name: set one-time boot to virtual media
+  uri:
+    url: "{{ web_ui }}/redfish/v1/Systems/1"
+    method: PATCH
+    headers:
+      Accept: application/json
+      OData-Version: "4.0"
+      X-Auth-Token: "{{ session_token }}"
+    body_format: json
+    body: |
+      { 
+        "Boot": {
+           "BootSourceOverrideTarget": "Cd", 
+           "BootSourceOverrideEnabled": "Once", 
+           "UefiTargetBootSourceOverride": null
+        }
+      }
+    validate_certs: no
+  register: r_one_time_boot
+  no_log: "{{ toggle_no_log | default(true) }}"
+  retries: 20
+  delay: 20
+  until: 'r_one_time_boot is not failed'
+
+- name: display the reply
+  debug:
+    verbosity: 1
+    var: r_one_time_boot
+
+- name: read the current one-time boot settings
+  uri:
+    url: "{{ web_ui }}/redfish/v1/Systems/1"
+    method: GET
+    headers:
+      Accept: application/json
+      OData-Version: "4.0"
+      X-Auth-Token: "{{ session_token }}"
+    body_format: json
+    body: '{}'
+    validate_certs: no
+  register: r_virtualmedia
+  no_log: "{{ toggle_no_log | default(true) }}"
+
+- name: display the reply
+  debug:
+    var: r_virtualmedia.json.Boot
+
+- name: pause to read message
+  pause: 
+    seconds: 5
+  when: "toggle_pause | default(false)"
+
+# There are a few reset types. 
+# Look for the "AllowableValues" list.
+#     "ResetType@Redfish.AllowableValues": [
+#        "On",
+#        "ForceOff",
+#        "GracefulShutdown",
+#        "ForceRestart",
+#        "Nmi",
+#        "PushPowerButton",
+#        "GracefulRestart"
+#     ],
+- name: restart
+  uri:
+    url: "{{ web_ui }}/redfish/v1/Systems/1/Actions/ComputerSystem.Reset"
+    method: POST
+    headers:
+      Accept: application/json
+      OData-Version: "4.0"
+      X-Auth-Token: "{{ session_token }}"
+    body_format: json
+    body: '{ "ResetType": "GracefulRestart" }'
+    validate_certs: no
+  register: r_restart
+  no_log: "{{ toggle_no_log | default(true) }}"
+  
+- name: display the reply
+  debug:
+    verbosity: 1
+    var: r_restart
+

@@ -1,0 +1,12 @@
+---
+- name: build a customized boot ISO
+  hosts: repositories
+  become: yes
+  vars_files:
+  - form.yml
+  - vars.yml
+  tasks:
+  - include_tasks: create_build_dir.yml
+  - include_tasks: prepare_iso.yml
+  - include_tasks: destroy_build_dir.yml
+

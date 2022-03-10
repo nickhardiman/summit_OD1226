@@ -1,0 +1,12 @@
+[repo1-rhel9-baseos]
+name = local copy of Red Hat Enterprise Linux 9 for x86_64 BaseOS
+baseurl = http://192.168.1.14/rhel9-repo/BaseOS
+enabled = 1
+gpgcheck = 0
+
+[repo1-rhel9-appstream]
+name = local copy of Red Hat Enterprise Linux 9 for x86_64 AppStream
+baseurl = http://192.168.1.14/rhel9-repo/AppStream
+enabled = 1
+gpgcheck = 0
+

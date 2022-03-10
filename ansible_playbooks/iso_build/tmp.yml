@@ -1,0 +1,26 @@
+---
+- name: tmp
+  hosts: localhost
+  become: no
+  gather_facts: no
+  vars:
+    str: '/var/www/html/rhel-server-7.9-x86_64-boot.iso: BLOCK_SIZE="2048" UUID="2020-09-17-14-47-27-00" LABEL="RHEL-7.9 Server.x86_64" TYPE="iso9660" PTUUID="6d3aa136" PTTYPE="dos"'
+  tasks:
+  - set_fact:
+      label: "{{ str | regex_replace('.+LABEL=\"([^\"]+)\".+', '\\1') | urlencode() }}"
+      #msg: "{{ str | regex_search('LABEL=\"[^\"]+\"') }}"
+      #msg: "{{ str | regex_replace('.+LABEL=\"([^\"]+)\".+', '\\1') | regex_replace(' ', '\x20') }}"
+      #msg: "{{ str | regex_replace('.+LABEL=\"([^\"]+)\".+', '\\1') | regex_replace(' ', '\\\x20') }}"
+      #msg: '{{ str | regex_replace(\'.+LABEL=\"([^\"]+)\".+", "\\1\') | regex_replace(" ", "\\x20") }}'
+  - set_fact:
+      label2: '{{ label | regex_replace("%", "\\x") }}'
+      #label2: '{{ label | regex_replace("%", "x") }}'
+  - debug:
+      var: label2
+
+
+  - copy:
+      content: "{{ label2 }}"
+      dest: /var/tmp/label
+
+

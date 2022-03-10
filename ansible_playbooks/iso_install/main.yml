@@ -1,0 +1,18 @@
+---
+- name: install the OS
+  hosts: builder1.lab.example.com
+  become: no
+  gather_facts: no
+  vars_files:
+  - form.yml
+  - vars.yml
+  tasks:
+  #
+  - include_tasks: create_session.yml
+  - block:
+    - include_tasks: power_on.yml
+    - include_tasks: mount_iso.yml
+    - include_tasks: boot_from_iso.yml
+    always:
+    - include_tasks: destroy_session.yml
+
