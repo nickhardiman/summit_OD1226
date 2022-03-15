@@ -4,6 +4,7 @@
   become: no
   gather_facts: no
   vars_files:
+  - form.yml
   - vars.yml
   tasks:
   #

@@ -16,16 +16,15 @@ if [ $RC != 0 ]; then
 fi;
 
 cd /home/nick/summit_OD1226/ansible_playbooks/machine_check
+cp /home/nick/summit_OD1226/ansible_playbooks/iso_build/form.yml .
 ansible-playbook main.yml
 RC=$?
 if [ $RC != 0 ]; then
   exit $RC;
 fi;
 
-cp /home/nick/summit_OD1226/ansible_playbooks/iso_build/form.yml \
-   /home/nick/summit_OD1226/ansible_playbooks/iso_install
-
 cd /home/nick/summit_OD1226/ansible_playbooks/iso_install
+cp /home/nick/summit_OD1226/ansible_playbooks/iso_build/form.yml .
 ansible-playbook main.yml
 RC=$?
 if [ $RC != 0 ]; then

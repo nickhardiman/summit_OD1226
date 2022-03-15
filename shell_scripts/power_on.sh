@@ -15,7 +15,7 @@ curl -v --insecure --silent \
   -u $USER:$PASS \
   -H 'Content-Type: application/json' \
   --data '{ "ResetType": "On" }' \
-  https://ILOCNX15200K1/redfish/v1/Systems/1/Actions/ComputerSystem.Reset \
+  https://bmc1/redfish/v1/Systems/1/Actions/ComputerSystem.Reset \
   > $JSON_FILE
 
 echo

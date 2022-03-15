@@ -21,12 +21,12 @@ source ./account
 # use ODATA "select" to display manufacturer JSON
 # Single quotes around the URI stop bash treating "$select" as a variable.
 #
-curl --insecure --silent \
+curl -v --insecure --silent \
   -X GET \
   -u $USER:$PASS \
   -H 'Content-Type: application/json' \
   --data '{}' \
-  'https://192.168.1.245/redfish/v1/Systems/1?$select=Manufacturer' \
+  'https://bmc1/redfish/v1/Systems/1?$select=Manufacturer' \
   > ${0}-select.json
 #
 # Use jq to make JSON readable.
@@ -39,7 +39,7 @@ curl --insecure --silent \
   -u $USER:$PASS \
   -H 'Content-Type: application/json' \
   --data '{}' \
-  https://192.168.1.245/redfish/v1/Systems/1 \
+  https://bmc1/redfish/v1/Systems/1 \
   > ${0}-all.json
 #
 echo

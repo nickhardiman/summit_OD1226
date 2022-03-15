@@ -1,7 +1,7 @@
 # check
 #
 - name: read system memory
-  uri:
+  ansible.builtin.uri:
     url: "{{ web_ui }}/redfish/v1/Systems/1/Memory/proc1dimm2"
     method: GET
     headers:
@@ -15,24 +15,24 @@
   no_log: "{{ toggle_no_log | default(true) }}"
 
 - name: display the reply
-  debug:
+  ansible.builtin.debug:
     verbosity: 1
     var: r_memory
 
 - name: copy memory value
-  set_fact:
+  ansible.builtin.set_fact:
     dimm2_size: "{{ r_memory.json.CapacityMiB }}"
 
 - name: display memory capacity
-  debug:
+  ansible.builtin.debug:
     var: dimm2_size
 
 - name: pause to read message
-  pause:
+  ansible.builtin.pause:
     seconds: 5
   when: "toggle_pause | default(false)"
 
 - name: continue if this DIMM is at least 4GiB
-  fail:
+  ansible.builtin.fail:
   when: "dimm2_size | int < 4096"
 

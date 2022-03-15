@@ -10,14 +10,13 @@
 # BootSourceOverrideEnabled
 
 TOKEN=$1
-SERVICE=https://192.168.1.245
 JSON_FILE=${0}.json
 
 curl -v --insecure --silent \
   --request GET \
   --header "X-Auth-Token: $1" \
   --header 'Content-Type: application/json' \
-  $SERVICE/redfish/v1/Systems/1 \
+  https://bmc1/redfish/v1/Systems/1 \
   > $JSON_FILE
 
 echo

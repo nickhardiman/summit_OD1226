@@ -7,7 +7,6 @@
 #set USER and PASS
 source ./account
 #
-SERVICE=https://192.168.1.245
 JSON_FILE=${0}.json
 
 curl -v --insecure --silent \
@@ -15,7 +14,7 @@ curl -v --insecure --silent \
   -u $USER:$PASS \
   -H 'Content-Type: application/json' \
   --data '{ "ResetType": "GracefulShutdown" }' \
-  $SERVICE/redfish/v1/Systems/1/Actions/ComputerSystem.Reset \
+  https://bmc1/redfish/v1/Systems/1/Actions/ComputerSystem.Reset \
   > $JSON_FILE
 
 echo

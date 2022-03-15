@@ -9,7 +9,6 @@
 #set USER and PASS
 source ./account
 #
-SERVICE=https://192.168.1.245
 JSON_FILE=${0}.json
 
 curl -v --insecure --silent \
@@ -20,7 +19,7 @@ curl -v --insecure --silent \
     "UserName": "nick",
     "Password": "redhatter"
   }' \
-  $SERVICE/redfish/v1/SessionService/Sessions \
+  https://bmc1/redfish/v1/SessionService/Sessions \
   > $JSON_FILE
 
 echo

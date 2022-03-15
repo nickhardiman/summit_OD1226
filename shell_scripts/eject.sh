@@ -7,7 +7,6 @@
 #set USER and PASS
 source ./account
 #
-SERVICE=https://192.168.1.245
 JSON_FILE=${0}.json
 
 curl -v --insecure --silent \
@@ -15,7 +14,7 @@ curl -v --insecure --silent \
   -u $USER:$PASS \
   -H 'Content-Type: application/json' \
   --data '{}' \
-  $SERVICE/redfish/v1/Managers/1/VirtualMedia/2/Actions/Oem/Hpe/HpeiLOVirtualMedia.EjectVirtualMedia \
+  https://bmc1/redfish/v1/Managers/1/VirtualMedia/2/Actions/Oem/Hpe/HpeiLOVirtualMedia.EjectVirtualMedia \
   > $JSON_FILE
 
 echo

@@ -10,7 +10,6 @@
 #set USER and PASS
 source ./account
 #
-SERVICE=https://192.168.1.245
 JSON_FILE=${0}.json
 
 curl -v --insecure --silent \
@@ -25,7 +24,7 @@ curl -v --insecure --silent \
            "UefiTargetBootSourceOverride": null
         }
   }' \
-  $SERVICE/redfish/v1/Systems/1 \
+  https://bmc1/redfish/v1/Systems/1 \
   > $JSON_FILE
 
 echo

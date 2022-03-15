@@ -4,7 +4,7 @@
 
 #set USER and PASS
 source ./account
-BMC=192.168.1.245
+BMC=bmc1
 
 ssh $USER@$BMC vm cdrom insert http://192.168.1.14/rhel-server-6.10-x86_64-boot.iso
 ssh $USER@$BMC vm cdrom set boot_once

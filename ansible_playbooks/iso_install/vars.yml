@@ -4,7 +4,8 @@ password: redhatter
 
 toggle_pause: false
 toggle_no_log: false
-web_ui: https://ILOCNX15200K1.lab.example.com
+web_ui: "https://{{ bmc }}"
+# This is the IP address of repo1 (DNS is on the "to do" list)
 image_url: "http://192.168.1.14/{{ new_iso }}"
 server_off: false
 

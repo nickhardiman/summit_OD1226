@@ -82,7 +82,7 @@ iotty=`tty`
 exec > $iotty 2> $iotty
 #
 cp /run/install/repo/my_scripts/phone_home.sh /mnt/sysimage/root/
-echo "@reboot sleep 60 && /bin/bash /root/phone_home.sh" > /mnt/sysimage/var/spool/cron/root
+echo "@reboot sleep 30 && /bin/bash /root/phone_home.sh" > /mnt/sysimage/var/spool/cron/root
 #
 %end
 

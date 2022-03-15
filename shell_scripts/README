@@ -35,3 +35,5 @@ git1:/var/git/hello_world.git/hooks/
 This goes in controller1:~/.ssh/config
 It disables SSH security checks. Bad idea.
 config
+
+

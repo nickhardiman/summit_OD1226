@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# ./use_user_session.sh  c90fea5fc242c1ef43f1fa02382aa174  1
+./close_user_session.sh 49ed49e57438b2333a82b399144cc136 nick00000000622a241e25a1cac0
 
 # This script uses jq, a JSON processor, to make the output easier to read. 
 # To install jq, run: 
@@ -11,14 +11,13 @@
 
 SESSION_TOKEN=$1
 SESSION_ID=$2
-SERVICE=https://192.168.1.245
 JSON_FILE=${0}.json
 
 curl --verbose --insecure --silent \
   --request DELETE \
   --header "X-Auth-Token: $SESSION_TOKEN" \
   --header 'Content-Type: application/json' \
-  $SERVICE/redfish/v1/SessionService/Sessions/$SESSION_ID
+  https://bmc1/redfish/v1/SessionService/Sessions/$SESSION_ID
   > $JSON_FILE
 
 echo
