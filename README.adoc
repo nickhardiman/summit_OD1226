@@ -1,0 +1,23 @@
+= Files for Red Hat Summit 2022 Session OD1226, "Installing Red Hat Enterprise Linux on a remote bare-metal server, using Ansible, Kickstart, and Redfish" 
+Nick Hardiman 
+:source-highlighter: highlight.js
+:revdate: 05-04-2022
+
+Installing Red Hat Enterprise Linux on a remote bare-metal server, using Ansible, Kickstart, and Redfish
+
+https://events.experiences.redhat.com/widget/redhat/sum22/SessionCatalog22/session/1639849813644001fptx
+
+Nick Hardiman, Senior Consultant, Red Hat
+
+Organizations need to provision bare-metal servers in their remote datacenters. Red Hat provides tools to get the job done, like OpenStack Ironic and Satellite PXE Boot. The DMTF standards organization provides the Redfish specification, which works across many vendor servers. Redfish is good for many jobs, from hardware checks to firmware updates. Here we use it to provision a bare-metal server. 
+
+In this session, we'll explain and demonstrate how to automatically install Red Hat Enterprise Linux on a remote machine in a datacenter, including:
+
+* Creating a bootable customized Kickstart ISO file.
+* Talking to the baseboard management controller (BMC) using its Redfish API.
+* Mounting the ISO remotely over the network.
+* Rebooting and "watching the magic happen."
+* The configuration provided by Kickstart needed for the installation without user intervention.
+* DMTF's Redfish specification that brings the benefits of web REST APIs to server hardware.
+* Ansible automation that manages the provisioning process.
+
