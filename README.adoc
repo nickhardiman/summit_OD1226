@@ -5,6 +5,8 @@ Nick Hardiman
 
 Installing Red Hat Enterprise Linux on a remote bare-metal server, using Ansible, Kickstart, and Redfish
 
+== the talk 
+
 https://events.experiences.redhat.com/widget/redhat/sum22/SessionCatalog22/session/1639849813644001fptx
 
 Nick Hardiman, Senior Consultant, Red Hat
@@ -20,4 +22,26 @@ In this session, we'll explain and demonstrate how to automatically install Red 
 * The configuration provided by Kickstart needed for the installation without user intervention.
 * DMTF's Redfish specification that brings the benefits of web REST APIs to server hardware.
 * Ansible automation that manages the provisioning process.
+
+== run a shell script 
+
+These scripts weere written to work in my demo environment. 
+They need a few tweaks to run in your environment. 
+For instance, to run the safe read-only manufacturer check script, this might work for you.
+
+* Open a terminal on your workstation.
+* Run these commands.
+
+```
+# download the examples
+git clone https://github.com/nickhardiman/summit_OD1226.git
+cd summit_OD1226/shell_scripts
+# replace my example user with your real user
+vim account
+# replace my example host with your real host
+vim ./manufacturer_check.sh
+# :%s/bmc1/my_machine.example.com/
+# run
+./manufacturer_check.sh
+```
 
