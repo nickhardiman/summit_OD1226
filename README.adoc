@@ -25,7 +25,7 @@ In this session, we'll explain and demonstrate how to automatically install Red 
 
 == run a shell script 
 
-These scripts weere written to work in my demo environment. 
+These scripts were written to work in my demo environment. 
 They need a few tweaks to run in your environment. 
 For instance, to run the safe read-only manufacturer check script, this might work for you.
 
@@ -44,4 +44,13 @@ vim ./manufacturer_check.sh
 # run
 ./manufacturer_check.sh
 ```
+
+== a BMC (Baseboard Management Controller)
+
+This is the tiny server stuck on your big server. If you have worked with Lenovo XClarity, Dell iDRAC or HPE ILO, you have worked with a BMC. 
+
+==  the web UI and the Redfish API
+
+The BMC usually runs both at the same address. 
+If the web UI is at https://bmc1/, then the Redfish API is at https://bmc1/redfish/v1/.
 
